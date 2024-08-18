@@ -31,13 +31,19 @@ pipeline{
                 //sh 'docker container exec $CONTAINER_NAME python train.py'
                 sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "python train.py"'
                 sh "docker cp $CONTAINER_NAME:/app/iris_model.pkl ."
-                sh "ls"
+               
                 echo "train model & save it"
             }
         }
 
         stage('push docker image'){
             steps{
+                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerhubpass', usernameVariable: 'dockerhubuser')]) 
+                {
+                    sh "docker image tag $DOCKER_IMAGE:latest ${env.dockerhubuser}/$DOCKER_IMAGE:latest"
+                    sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
+                    sh "docker push ${emv.dockerhubuser}/$DOCKER_IMAGE:latest"
+                }
                 echo "push docker image to dockerhub"
             }
         }
