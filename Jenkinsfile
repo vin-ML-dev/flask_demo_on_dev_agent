@@ -31,6 +31,7 @@ pipeline{
                 //sh 'docker container exec $CONTAINER_NAME python train.py'
                 sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "python train.py"'
                 sh "docker cp $CONTAINER_NAME:/app/iris_model.pkl ."
+                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "ls"'
                 echo "train model & save it"
             }
         }
