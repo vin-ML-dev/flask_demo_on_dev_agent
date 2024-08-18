@@ -28,7 +28,7 @@ pipeline{
             steps{
                 sh 'docker stop $CONTAINER_NAME || true'
                 sh 'docker rm $CONTAINER_NAME || true'
-                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "pytest train.py"'
+                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "python train.py"'
                 echo "train model & save it"
             }
         }
