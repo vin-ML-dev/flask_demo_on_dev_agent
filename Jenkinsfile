@@ -9,9 +9,11 @@ pipeline{
 
     stages{
 
-        stage('clone git code'){
+        stage('Build image'){
             steps{
-                echo "get code from github"
+                sh 'docker build -t flask_app_dev:latest .'
+                //sh 'docker container exec bash python train.py'''
+                //echo "get code from github"
             }
         }
 
@@ -29,6 +31,7 @@ pipeline{
 
         stage('deploy'){
             steps{
+                sh "docker run -d -p 5000:5000 --name flask-app flask_app_dev:latest"
                 echo "deploy code"
             }
         }
