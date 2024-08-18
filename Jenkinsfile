@@ -17,6 +17,7 @@ pipeline{
 
         stage('Build image'){
             steps{
+                echo "Building image..."
                 sh 'docker build -t $DOCKER_IMAGE:latest .'
                 //sh 'docker container exec bash python train.py'''
                 //echo "get code from github"
@@ -40,6 +41,9 @@ pipeline{
 
         stage('deploy'){
             steps{
+                echo "Deploying..!"
+                sh 'docker stop $CONTAINER_NAME || true'
+                sh 'docker rm $CONTAINER_NAME || true'
                 sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $DOCKER_IMAGE:latest"
                 echo "deploy code"
             }
