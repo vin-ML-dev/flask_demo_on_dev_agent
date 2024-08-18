@@ -7,11 +7,17 @@ pipeline{
         
     }
 
+    environment {
+        DOCKER_IMAGE = 'flask-app-dev'
+        CONTAINER_NAME = "flask-app"
+        //DOCKERHUB_CREDENTIALS=credentials('dockerhub-credentials')
+    }
+
     stages{
 
         stage('Build image'){
             steps{
-                sh 'docker build -t flask_app_dev:latest .'
+                sh 'docker build -t $DOCKER_IMAGE:latest .'
                 //sh 'docker container exec bash python train.py'''
                 //echo "get code from github"
             }
@@ -19,6 +25,9 @@ pipeline{
 
         stage('train model'){
             steps{
+                sh 'docker stop $CONTAINER_NAME || true'
+                sh 'docker rm $CONTAINER_NAME || true'
+                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "pytest train.py"'
                 echo "train model & save it"
             }
         }
@@ -31,7 +40,7 @@ pipeline{
 
         stage('deploy'){
             steps{
-                sh "docker run -d -p 5000:5000 --name flask-app flask_app_dev:latest"
+                sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $DOCKER_IMAGE:latest"
                 echo "deploy code"
             }
         }

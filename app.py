@@ -1,10 +1,44 @@
-from flask import Flask
+from flask import Flask,render_template,jsonify,request
+import os
+import pickle,json
+import numpy as np
+
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def make_predict(sample):
+   with open('iris_model.pkl', 'rb') as f:
+       model = pickle.load(f)
+       
+   prediction = model.predict(sample)[0]
+   
+   labels={0:"setosa",1:"versicolor",2:"virginica"}
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+   return labels[prediction]
+   
+   
+@app.route("/")
+def hello():
+   return render_template('home.html')
+
+@app.route("/predict/",methods=['POST'])
+def predict():
+
+   data = request.json
+   d1 = json.loads(data)
+   #print(d1)
+   t = d1['test_data']
+   
+   sample = np.array([t])
+   pred = make_predict(sample)
+   #print(pred)
+
+   return jsonify({'response':pred})
+   
+   
+   
+
+
+if __name__ == "__main__":
+   
+   app.run(host='0.0.0.0', port="5000",debug=True)
