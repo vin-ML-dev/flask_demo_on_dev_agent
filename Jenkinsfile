@@ -42,7 +42,7 @@ pipeline{
                 {
                     sh "docker image tag $DOCKER_IMAGE:latest ${env.dockerhubuser}/$DOCKER_IMAGE:latest"
                     sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
-                    sh "docker push ${emv.dockerhubuser}/$DOCKER_IMAGE:latest"
+                    sh "docker push ${env.dockerhubuser}/$DOCKER_IMAGE:latest"
                 }
                 echo "push docker image to dockerhub"
             }
