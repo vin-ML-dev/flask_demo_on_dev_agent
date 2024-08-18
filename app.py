@@ -25,9 +25,11 @@ def hello():
 def predict():
 
    data = request.json
-   d1 = json.loads(data)
+   #d1 = json.loads(data)
    #print(d1)
-   t = d1['test_data']
+   #print(data)
+   t = data['test_data']
+   #print(t)
    
    sample = np.array([t])
    pred = make_predict(sample)
@@ -41,4 +43,4 @@ def predict():
 
 if __name__ == "__main__":
    
-   app.run(host='0.0.0.0', port="5000",debug=True)
+   app.run(host='0.0.0.0', port="5000")
