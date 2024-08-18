@@ -29,7 +29,8 @@ pipeline{
                 sh 'docker stop $CONTAINER_NAME || true'
                 sh 'docker rm $CONTAINER_NAME || true'
                 //sh 'docker container exec $CONTAINER_NAME python train.py'
-                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "python train.py" -v .:/usr/src/app'
+                sh 'docker run --name $CONTAINER_NAME $DOCKER_IMAGE /bin/bash -c "python train.py"'
+                sh "docker cp $CONTAINER_NAME:/app/iris_model.pkl ."
                 echo "train model & save it"
             }
         }
