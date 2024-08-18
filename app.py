@@ -7,6 +7,8 @@ import numpy as np
 app = Flask(__name__)
 
 def make_predict(sample):
+   print(os.listdir('.'))
+   print(os.getcwd())
    with open('iris_model.pkl', 'rb') as f:
        model = pickle.load(f)
        
